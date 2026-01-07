@@ -1,0 +1,466 @@
+/* --- 1. CSS 变量定义 --- */
+:root {
+    /* 核心颜色 */
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --bg-body: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-sidebar: rgba(248, 250, 252, 0.9); /* 增加不透明度 */
+    --text-main: #1f2937;
+    --text-sub: #4b5563;
+    --text-muted: #9ca3af;
+    --border: #e5e7eb;
+    
+    /* 阴影与圆角 */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-lg: 1rem;
+    --radius-md: 0.75rem;
+    --radius-sm: 0.5rem;
+    
+    /* 强调色 */
+    --accent-yellow: #facc15;
+    --accent-orange: #f97316;
+    --accent-orange-bg: #fff7ed;
+    
+    /* 测试模式 */
+    --test-bg: #1e1b4b;
+    --test-text: #e0e7ff;
+    --test-accent: #4ade80;
+
+    /* 布局变量 */
+    --header-height: auto;
+    --content-height: 640px; /* 桌面端默认高度 */
+}
+
+/* 深色模式 */
+.dark {
+    --primary: #3b82f6;
+    --primary-light: rgba(59, 130, 246, 0.15);
+    --bg-body: #020617;
+    --bg-card: #0f172a;
+    --bg-sidebar: rgba(15, 23, 42, 0.95);
+    --text-main: #f1f5f9;
+    --text-sub: #cbd5e1;
+    --text-muted: #64748b;
+    --border: #1e293b;
+    --accent-orange-bg: rgba(249, 115, 22, 0.15);
+}
+
+/* --- 2. 全局重置 --- */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+    /* 移动端全屏设置 */
+    min-height: 100vh;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* 底部留白给任务栏 */
+}
+
+button, select, input { font-family: inherit; border: none; background: none; cursor: pointer; outline: none; }
+
+/* 容器包裹 */
+.app-wrapper {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+/* 卡片通用样式 */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* --- 3. 头部 Header --- */
+.header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 50;
+}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-sub);
+    background-color: var(--bg-body);
+    transition: all 0.2s;
+}
+.btn:hover { background-color: var(--border); color: var(--text-main); }
+.btn.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid var(--primary); 
+}
+
+/* --- 4. 视图容器 (View Container) --- */
+/* 这是代替硬编码 height: 640px 的关键类 */
+.view-container {
+    display: flex;
+    flex-direction: column;
+    height: var(--content-height); /* 桌面端固定高度 */
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* iOS 滚动回弹 */
+}
+
+/* --- 5. 列表布局 (List Layout) --- */
+.layout-split {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    font-weight: bold;
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-list {
+    padding: 0.5rem;
+    overflow-y: auto;
+}
+
+.nav-item-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-sub);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+.nav-item-btn.active { background-color: var(--primary-light); color: var(--primary); }
+
+.content-area {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: var(--bg-card);
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.list-item:active { transform: scale(0.98); }
+
+.poster-thumb {
+    width: 48px;
+    height: 64px;
+    border-radius: 4px;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+/* --- 6. 网格布局 (Grid Layout) --- */
+.filter-bar {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background-color: var(--bg-card);
+    z-index: 20;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.grid-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg-card);
+}
+.card-poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    position: relative;
+}
+
+/* --- 7. 搜索布局 --- */
+.search-hero {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: linear-gradient(to bottom, var(--bg-body), var(--bg-card));
+}
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    font-size: 1.125rem;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* --- 8. 详情页 (Detail View) --- */
+.detail-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+}
+.detail-hero-section {
+    padding: 3rem 1.5rem 2rem;
+    color: white;
+    text-align: center;
+    position: relative;
+    flex-shrink: 0;
+}
+.detail-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.8;
+    filter: blur(20px) brightness(0.7);
+}
+.detail-content-wrapper {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.detail-poster-large {
+    width: 140px;
+    height: 210px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    margin-bottom: 0.5rem;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+}
+
+/* --- 9. 任务栏 (Task Bar) --- */
+.task-bar {
+    position: fixed;
+    bottom: 1rem; 
+    left: 1rem; 
+    right: 1rem;
+    background-color: var(--test-bg);
+    color: var(--test-text);
+    padding: 1rem;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    border-radius: var(--radius-lg);
+    /* 适配底部安全区域 */
+    margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* Footer Grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* 渐变色类 */
+.poster-gradient-0 { background: linear-gradient(135deg, #6366f1, #a855f7); }
+.poster-gradient-1 { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+.poster-gradient-2 { background: linear-gradient(135deg, #ef4444, #f97316); }
+.poster-gradient-3 { background: linear-gradient(135deg, #10b981, #14b8a6); }
+.poster-gradient-4 { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+.poster-gradient-5 { background: linear-gradient(135deg, #ec4899, #e11d48); }
+.poster-gradient-6 { background: linear-gradient(135deg, #475569, #1e293b); }
+.poster-gradient-7 { background: linear-gradient(135deg, #8b5cf6, #c026d3); }
+
+/* --- 10. 移动端适配 (Mobile Responsive) --- */
+/* iPhone 17 Pro/Max 及其它手机尺寸 */
+@media (max-width: 768px) {
+    :root {
+        --content-height: auto; /* 取消固定高度 */
+    }
+
+    body {
+        padding: 0;
+        /* 移动端全屏体验 */
+    }
+
+    .app-wrapper {
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+        height: 100vh;
+        height: 100dvh; /* 动态视口高度，适配移动浏览器地址栏变化 */
+    }
+
+    .container {
+        gap: 0;
+        border-radius: 0;
+    }
+
+    .card {
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    /* 头部适配 */
+    .header {
+        padding: calc(0.5rem + env(safe-area-inset-top)) 1rem 0.5rem; /* 适配刘海 */
+        background: var(--bg-card);
+        position: sticky;
+        top: 0;
+    }
+
+    /* 视图容器全屏 */
+    .view-container {
+        height: auto;
+        flex: 1; /* 占据剩余空间 */
+    }
+
+    /* 列表布局移动端：侧边栏变为顶部导航 */
+    .layout-split {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .sidebar-header { display: none; } /* 移动端隐藏侧边栏标题 */
+    .nav-list {
+        display: flex;
+        padding: 0.5rem;
+        gap: 0.5rem;
+        overflow-x: auto; /* 水平滚动 */
+        scroll-snap-type: x mandatory;
+    }
+    .nav-list li { flex-shrink: 0; scroll-snap-align: start; }
+    .nav-item-btn {
+        width: auto;
+        padding: 0.5rem 1rem;
+        background: var(--bg-body);
+        border: 1px solid var(--border);
+        white-space: nowrap;
+    }
+    .nav-item-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .sub-nav { display: none; } /* 移动端不显示子菜单 */
+
+    /* 内容区域 */
+    .content-area {
+        padding: 1rem;
+        padding-bottom: 120px; /* 留出底部空间 */
+    }
+
+    /* 网格布局移动端 */
+    .filter-bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        flex-wrap: wrap;
+    }
+    .select-input { flex: 1; min-width: 100px; }
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* 手机端强制双列 */
+        gap: 0.75rem;
+        padding: 0.75rem;
+        padding-bottom: 120px;
+    }
+
+    /* 搜索布局 */
+    .search-hero { padding: 2rem 1rem; }
+    .search-title { font-size: 1.5rem; }
+    
+    /* 详情页移动端 */
+    .detail-view {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: var(--bg-card);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .detail-back-bar { top: calc(1rem + env(safe-area-inset-top)); }
+    .detail-hero-section { padding-top: calc(4rem + env(safe-area-inset-top)); }
+
+    /* 任务栏移动端 */
+    .task-bar {
+        bottom: 0; left: 0; right: 0;
+        margin: 0;
+        border-radius: 20px 20px 0 0; /* 仅顶部圆角 */
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+    
+    .footer-grid {
+        display: none; /* 移动端隐藏底部说明，专注内容 */
+    }
+}

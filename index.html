@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 优化 Viewport 设置：禁止用户缩放，适配刘海屏 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>电影资料库 - 移动端适配版</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <div class="container" id="app">
+            <!-- 头部 -->
+            <header class="header card" id="header-container"></header>
+
+            <!-- 内容区域 -->
+            <main class="content-wrapper card" id="content-container"></main>
+
+            <!-- 底部说明 (在某些视图下隐藏) -->
+            <footer id="footer-container" class="footer-grid"></footer>
+        </div>
+    </div>
+    
+    <!-- 测试任务栏容器 -->
+    <div id="task-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
